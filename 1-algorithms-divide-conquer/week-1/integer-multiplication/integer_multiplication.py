@@ -12,8 +12,6 @@ def karatsuba(a: int, b: int) -> int:
 
     See: https://en.wikipedia.org/wiki/Karatsuba_algorithm
     """
-    print((a, b))
-
     if a < 10 or b < 10:
         return a * b
 
