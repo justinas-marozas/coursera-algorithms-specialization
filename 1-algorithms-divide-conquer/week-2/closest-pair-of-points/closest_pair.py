@@ -24,14 +24,11 @@ def recursive(
     if len(points) == 2:
         return points, get_distance(*points)
     points_a, points_b = split(points)
-    best_pair_a, best_dist_a = recursive(points_a, best_pair, best_distance)
-    best_pair_b, best_dist_b = recursive(points_b, best_pair, best_distance)
-    min_dist = min(best_distance, best_dist_a, best_dist_b)
-    if best_dist_a == min_dist:
-        return best_pair_a, best_dist_a
-    if best_dist_b == min_dist:
-        return best_pair_b, best_dist_b
-    return best_pair, best_distance
+    return min([
+        recursive(points_a, best_pair, best_distance),
+        recursive(points_b, best_pair, best_distance),
+        (best_pair, best_distance)
+    ], key=lambda x: x[1])
 
 
 def naive(points: List[Point]) -> Tuple[List[Point], float]:
