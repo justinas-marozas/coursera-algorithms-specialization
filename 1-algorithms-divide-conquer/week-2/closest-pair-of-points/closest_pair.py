@@ -1,3 +1,4 @@
+import math
 from typing import List, NamedTuple, Tuple
 
 
@@ -7,6 +8,33 @@ class Point(NamedTuple):
 
 
 def find_closest_pair(points: List[Point]) -> Tuple[List[Point], float]:
+    sorted_points = sort_points(points)
+    best_pair = sorted_points[:2]
+    best_dist = get_distance(*best_pair)
+    return recursive(sorted_points, best_pair, best_dist)
+
+
+def recursive(
+    points: List[Point],
+    best_pair: List[Point],
+    best_distance: float
+) -> Tuple[List[Point], float]:
+    if len(points) < 2:
+        return best_pair, best_distance
+    if len(points) == 2:
+        return points, get_distance(*points)
+    points_a, points_b = split(points)
+    best_pair_a, best_dist_a = recursive(points_a, best_pair, best_distance)
+    best_pair_b, best_dist_b = recursive(points_b, best_pair, best_distance)
+    min_dist = min(best_distance, best_dist_a, best_dist_b)
+    if best_dist_a == min_dist:
+        return best_pair_a, best_dist_a
+    if best_dist_b == min_dist:
+        return best_pair_b, best_dist_b
+    return best_pair, best_distance
+
+
+def naive(points: List[Point]) -> Tuple[List[Point], float]:
     best_pair = points[:2]
     best_dist = get_distance(*best_pair)
     for i in range(0, len(points) - 1):
@@ -20,3 +48,14 @@ def find_closest_pair(points: List[Point]) -> Tuple[List[Point], float]:
 
 def get_distance(a: Point, b: Point) -> float:
     return ((a.x - b.x)**2 + (a.y - b.y)**2)**0.5
+
+
+def sort_points(points: List[Point]) -> List[Point]:
+    sorted_y = sorted(points, key=lambda p: p.y)
+    sorted_xy = sorted(sorted_y, key=lambda p: p.x)
+    return sorted_xy
+
+
+def split(points: List[Point]) -> Tuple[List[Point], List[Point]]:
+    split_point = math.ceil(len(points) / 2)
+    return points[:split_point], points[split_point:]
