@@ -1,26 +1,25 @@
-from typing import List, Tuple
+from typing import List
 
 import nose
 
 from parameterized import parameterized
 
 import closest_pair
+from closest_pair import Point
 
-
-Point = Tuple[float, float]
 
 POINTS_1: List[Point] = [
-    (73.24, 43.09),
-    (7.19, 92.69),
-    (79.91, 13.63),
-    (51.94, 124.1),
-    (102.97, 27.57),
-    (21.52, 96.38)
+    Point(x=73.24, y=43.09),
+    Point(x=7.19, y=92.69),
+    Point(x=79.91, y=13.63),
+    Point(x=51.94, y=124.1),
+    Point(x=102.97, y=27.57),
+    Point(x=21.52, y=96.38)
 ]
 CLOSEST_DISTANCE_1 = 14.797
 CLOSEST_PAIR_1: List[Point] = [
-    (7.19, 92.69),
-    (21.52, 96.38)
+    Point(x=7.19, y=92.69),
+    Point(x=21.52, y=96.38)
 ]
 
 
