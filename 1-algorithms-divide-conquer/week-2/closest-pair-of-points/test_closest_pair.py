@@ -38,7 +38,7 @@ def test_closest_pair_distance_computed_correctly(points: List[Point], expected:
 def test_correct_closest_pair_found(points: List[Point], expected: List[Point]) -> None:
     actual, _ = closest_pair.find_closest_pair(points)
 
-    assert actual == expected
+    assert (actual == expected) or (reversed(actual) == expected)
 
 
 if __name__ == '__main__':
