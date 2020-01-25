@@ -17,5 +17,17 @@ def test_inversions_are_counted_correctly(seq, expected) -> None:
     assert actual == expected
 
 
+def test_assignment_file() -> None:
+    numbers = [
+        int(number)
+        for number in open('shuffled-integers.txt', mode='r', encoding='utf-8')
+    ]
+
+    actual, _ = inversion_count.count_inversions(numbers)
+
+    print(f'{actual = }')
+    assert actual == 2407905288
+
+
 if __name__ == '__main__':
     nose.main()
