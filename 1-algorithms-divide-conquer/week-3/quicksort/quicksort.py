@@ -17,6 +17,10 @@ def choose_pivot_assignment_1(l_i: int, r_i: int) -> int:
     return l_i
 
 
+def choose_pivot_assignment_2(l_i: int, r_i: int) -> int:
+    return r_i - 1
+
+
 def _quicksort(
     seq: list,
     l_i: int,
@@ -70,3 +74,9 @@ def quicksort_assignment_1(seq: list) -> Tuple[list, int]:
     l_i = 0
     r_i = len(seq)
     return _quicksort(seq.copy(), l_i, r_i, choose_pivot_assignment_1)
+
+
+def quicksort_assignment_2(seq: list) -> Tuple[list, int]:
+    l_i = 0
+    r_i = len(seq)
+    return _quicksort(seq.copy(), l_i, r_i, choose_pivot_assignment_2)
