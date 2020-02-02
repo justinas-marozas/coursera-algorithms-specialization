@@ -1,21 +1,12 @@
 import random
-from typing import Tuple
+from typing import Callable, Tuple
 
 
 def quicksort(seq: list) -> list:
     l_i = 0
     r_i = len(seq)
-    return _quicksort(seq.copy(), l_i, r_i)
-
-
-def _quicksort(seq: list, l_i: int, r_i: int) -> list:
-    if r_i - l_i < 1:
-        return seq
-    p_i = choose_pivot(l_i, r_i)
-    seq, p_i = partition(seq, l_i, r_i, p_i)
-    seq = _quicksort(seq, l_i, p_i)
-    seq = _quicksort(seq, p_i + 1, r_i)
-    return seq
+    sorted_seq, _ = _quicksort(seq.copy(), l_i, r_i)
+    return sorted_seq
 
 
 def choose_pivot(l_i: int, r_i: int) -> int:
@@ -24,6 +15,23 @@ def choose_pivot(l_i: int, r_i: int) -> int:
 
 def choose_pivot_exercise(l_i: int, r_i: int) -> int:
     return l_i
+
+
+def _quicksort(
+    seq: list,
+    l_i: int,
+    r_i: int,
+    n_comparisons: int = 0,
+    pivot_picker: Callable[[int, int], int] = choose_pivot,
+) -> Tuple[list, int]:
+    if r_i - l_i < 1:
+        return seq, n_comparisons
+    p_i = choose_pivot(l_i, r_i)
+    n_comparisons += r_i - l_i - 1
+    seq, p_i = partition(seq, l_i, r_i, p_i)
+    seq, n_comparisons = _quicksort(seq, l_i, p_i, n_comparisons)
+    seq, n_comparisons = _quicksort(seq, p_i + 1, r_i, n_comparisons)
+    return seq, n_comparisons
 
 
 def partition(seq: list, l_i: int, r_i: int, p_i: int) -> Tuple[list, int]:
@@ -56,3 +64,9 @@ def partition(seq: list, l_i: int, r_i: int, p_i: int) -> Tuple[list, int]:
     seq[p_i] = seq[p_i_new]
     seq[p_i_new] = p
     return seq, p_i_new
+
+
+def quicksort_assignment(seq: list) -> Tuple[list, int]:
+    l_i = 0
+    r_i = len(seq)
+    return _quicksort(seq.copy(), l_i, r_i, 0, choose_pivot_exercise)
