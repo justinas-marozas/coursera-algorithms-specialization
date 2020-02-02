@@ -133,6 +133,26 @@ def test_assignment_3() -> None:
     assert actual_n_comparisons == 138_382
 
 
+def test_median_picker_does_least_work() -> None:
+    seq, _ = get_assignment_input()
+
+    # Succeeded with `range(1_000)` but took forever to complete.
+    for _ in range(10):
+        _, random_n = quicksort.quicksort_assignment(seq, quicksort.pick_random)
+        _, left_n = quicksort.quicksort_assignment(seq, quicksort.pick_leftmost)
+        _, right_n = quicksort.quicksort_assignment(seq, quicksort.pick_rightmost)
+        _, med_n = quicksort.quicksort_assignment(
+            seq,
+            quicksort.pick_median_from_left_mid_right_points
+        )
+
+        print(f'{random_n = }')
+        print(f'{left_n = }')
+        print(f'{right_n = }')
+        print(f'{med_n = }')
+        assert med_n < min(random_n, left_n, right_n)
+
+
 def get_assignment_input() -> Tuple[List[int], List[int]]:
     seq = [
         int(x)
