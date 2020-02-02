@@ -52,7 +52,7 @@ def _quicksort(
     seq: list,
     l_i: int,
     r_i: int,
-    pivot_picker: Callable[[list, int, int], int] = pick_random,
+    pivot_picker: Callable[[list, int, int], int] = pick_median_from_left_mid_right_points,
     n_comparisons: int = 0,
 ) -> Tuple[list, int]:
     """QuickSort algorithm.
