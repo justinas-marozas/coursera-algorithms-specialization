@@ -1,6 +1,28 @@
+from typing import Tuple
 
 
-def partition(seq: list, l_i: int, r_i: int, p_i: int) -> list:
+def quicksort(seq: list) -> list:
+    l_i = 0
+    r_i = len(seq)
+    return _quicksort(seq.copy(), l_i, r_i)
+
+
+def _quicksort(seq: list, l_i: int, r_i: int) -> list:
+    if r_i - l_i < 1:
+        return seq
+    p_i = choose_pivot(l_i, r_i)
+    seq, p_i = partition(seq, l_i, r_i, p_i)
+    seq = _quicksort(seq, l_i, p_i)
+    seq = _quicksort(seq, p_i + 1, r_i)
+    return seq
+
+
+def choose_pivot(l_i: int, r_i: int) -> int:
+    # TODO
+    return l_i
+
+
+def partition(seq: list, l_i: int, r_i: int, p_i: int) -> Tuple[list, int]:
     """Partition a part of the given sequence.
 
     Choose an item `p` to partition by and move all items `x < p` to the left of `p`
@@ -9,7 +31,9 @@ def partition(seq: list, l_i: int, r_i: int, p_i: int) -> list:
     :param l_i: The leftmost index.
     :param r_i: The rightmost index.
     :param p_i: Partition index.
-    :returns: Same sequence with the part bounded by `l_i` and `r_i` partitioned.
+    :returns: A tuple of:
+        * Same sequence with the part bounded by `l_i` and `r_i` partitioned;
+        * The new index of the partition element.
     """
     # Lets start by moving the partition key to the front of the sequence.
     # Just so it's easier to keep track of it as items get moved around.
@@ -24,6 +48,7 @@ def partition(seq: list, l_i: int, r_i: int, p_i: int) -> list:
         seq[i] = seq[j]
         seq[j] = temp
         i += 1
-    seq[p_i] = seq[i - 1]
-    seq[i - 1] = p
-    return seq
+    p_i_new = i - 1
+    seq[p_i] = seq[p_i_new]
+    seq[p_i_new] = p
+    return seq, p_i_new

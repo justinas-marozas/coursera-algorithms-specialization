@@ -1,3 +1,5 @@
+import random
+
 import nose
 from parameterized import parameterized
 
@@ -14,14 +16,35 @@ import quicksort
     ([1, 2, 3, 4, 5, 6, 7, 8], 0, 2, 1, 1),
     ([1, 2, 3, 4, 5, 6, 7, 8], 6, 7, 6, 6)
 ])
-def test_partition(seq: list, l_i: int, r_i: int, p_i: int, p_i_post: int) -> None:
+def test_partition(seq: list, l_i: int, r_i: int, p_i: int, p_i_expected: int) -> None:
     pivot = seq[p_i]
 
-    actual = quicksort.partition(seq, l_i, r_i, p_i)
+    seq_actual, p_i_actual = quicksort.partition(seq, l_i, r_i, p_i)
 
-    assert actual[p_i_post] == pivot
-    assert all(x < actual[p_i_post] for x in actual[:p_i_post])
-    assert all(x > actual[p_i_post] for x in actual[p_i_post + 1:])
+    assert p_i_actual == p_i_expected
+    assert seq_actual[p_i_expected] == pivot
+    assert all(
+        x < seq_actual[p_i_expected]
+        for x in seq_actual[:p_i_expected]
+    )
+    assert all(
+        x > seq_actual[p_i_expected]
+        for x in seq_actual[p_i_expected + 1:]
+    )
+
+
+@parameterized([
+    ([x for x in random.sample(range(10), 10)],),
+    ([x for x in random.sample(range(100), 100)],),
+    ([x for x in random.sample(range(1000), 1000)],),
+    ([x for x in random.sample(range(10000), 10000)],),
+])
+def test_quicksort(seq: list) -> None:
+    expected = sorted(seq)
+
+    actual = quicksort.quicksort(seq)
+
+    assert actual == expected
 
 
 if __name__ == '__main__':
