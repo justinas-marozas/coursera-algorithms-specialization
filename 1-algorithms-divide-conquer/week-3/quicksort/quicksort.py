@@ -112,22 +112,11 @@ def partition(seq: list, l_i: int, r_i: int, p_i: int) -> Tuple[list, int]:
     return seq, p_i_new
 
 
-def quicksort_assignment_1(seq: list) -> Tuple[list, int]:
-    """Count the number of comparisons when using leftmost item as partition."""
+def quicksort_assignment(
+    seq: list,
+    pivot_picker: Callable[[list, int, int], int]
+) -> Tuple[list, int]:
+    """Count the number of comparisons when using given pivot_picker function."""
     l_i = 0
     r_i = len(seq)
-    return _quicksort(seq.copy(), l_i, r_i, pick_leftmost)
-
-
-def quicksort_assignment_2(seq: list) -> Tuple[list, int]:
-    """Count the number of comparisons when using rightmost item as partition."""
-    l_i = 0
-    r_i = len(seq)
-    return _quicksort(seq.copy(), l_i, r_i, pick_rightmost)
-
-
-def quicksort_assignment_3(seq: list) -> Tuple[list, int]:
-    """Count the number of comparisons when using median of [leftmost, mid, rightmost] items as partition."""
-    l_i = 0
-    r_i = len(seq)
-    return _quicksort(seq.copy(), l_i, r_i, pick_median_from_left_mid_right_points)
+    return _quicksort(seq.copy(), l_i, r_i, pivot_picker)

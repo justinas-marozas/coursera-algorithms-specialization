@@ -54,7 +54,7 @@ def test_assignment_1() -> None:
     """See <./README.md>."""
     seq, sorted_seq = get_assignment_input()
 
-    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment_1(seq)
+    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment(seq, quicksort.pick_leftmost)
 
     assert actual_seq == sorted_seq
     print(f'{actual_n_comparisons = }')
@@ -65,7 +65,7 @@ def test_assignment_2() -> None:
     """See <./README.md>."""
     seq, sorted_seq = get_assignment_input()
 
-    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment_2(seq)
+    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment(seq, quicksort.pick_rightmost)
 
     assert actual_seq == sorted_seq
     print(f'{actual_n_comparisons = }')
@@ -76,7 +76,10 @@ def test_assignment_3() -> None:
     """See <./README.md>."""
     seq, sorted_seq = get_assignment_input()
 
-    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment_3(seq)
+    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment(
+        seq,
+        quicksort.pick_median_from_left_mid_right_points
+    )
 
     assert actual_seq == sorted_seq
     print(f'{actual_n_comparisons = }')
