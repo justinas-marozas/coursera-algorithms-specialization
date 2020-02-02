@@ -1,3 +1,4 @@
+import random
 from typing import Tuple
 
 
@@ -18,7 +19,10 @@ def _quicksort(seq: list, l_i: int, r_i: int) -> list:
 
 
 def choose_pivot(l_i: int, r_i: int) -> int:
-    # TODO
+    return random.randint(l_i, r_i - 1)
+
+
+def choose_pivot_exercise(l_i: int, r_i: int) -> int:
     return l_i
 
 
