@@ -13,7 +13,7 @@ def choose_pivot(l_i: int, r_i: int) -> int:
     return random.randint(l_i, r_i - 1)
 
 
-def choose_pivot_exercise(l_i: int, r_i: int) -> int:
+def choose_pivot_assignment_1(l_i: int, r_i: int) -> int:
     return l_i
 
 
@@ -21,16 +21,16 @@ def _quicksort(
     seq: list,
     l_i: int,
     r_i: int,
-    n_comparisons: int = 0,
     pivot_picker: Callable[[int, int], int] = choose_pivot,
+    n_comparisons: int = 0,
 ) -> Tuple[list, int]:
     if r_i - l_i < 1:
         return seq, n_comparisons
-    p_i = choose_pivot(l_i, r_i)
+    p_i = pivot_picker(l_i, r_i)
     n_comparisons += r_i - l_i - 1
     seq, p_i = partition(seq, l_i, r_i, p_i)
-    seq, n_comparisons = _quicksort(seq, l_i, p_i, n_comparisons)
-    seq, n_comparisons = _quicksort(seq, p_i + 1, r_i, n_comparisons)
+    seq, n_comparisons = _quicksort(seq, l_i, p_i, pivot_picker, n_comparisons)
+    seq, n_comparisons = _quicksort(seq, p_i + 1, r_i, pivot_picker, n_comparisons)
     return seq, n_comparisons
 
 
@@ -66,7 +66,7 @@ def partition(seq: list, l_i: int, r_i: int, p_i: int) -> Tuple[list, int]:
     return seq, p_i_new
 
 
-def quicksort_assignment(seq: list) -> Tuple[list, int]:
+def quicksort_assignment_1(seq: list) -> Tuple[list, int]:
     l_i = 0
     r_i = len(seq)
-    return _quicksort(seq.copy(), l_i, r_i, 0, choose_pivot_exercise)
+    return _quicksort(seq.copy(), l_i, r_i, choose_pivot_assignment_1)
