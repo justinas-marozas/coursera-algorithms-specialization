@@ -79,5 +79,21 @@ def test_assignment_2() -> None:
     assert actual_n_comparisons == 164123
 
 
+def test_assignment_3() -> None:
+    seq = [
+        int(x)
+        for x in open('./input.txt', mode='r', encoding='utf-8')
+    ]
+    # Verify the contents of `input.txt` are as expected.
+    sorted_seq = sorted(seq)
+    assert sorted_seq == list(range(1, 10001))
+
+    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment_3(seq)
+
+    assert actual_seq == sorted_seq
+    print(f'{actual_n_comparisons = }')
+    assert actual_n_comparisons == 138382
+
+
 if __name__ == '__main__':
     nose.main()
