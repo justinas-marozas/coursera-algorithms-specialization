@@ -1,4 +1,5 @@
 import random
+from typing import List, Tuple
 
 import nose
 from parameterized import parameterized
@@ -17,6 +18,7 @@ import quicksort
     ([1, 2, 3, 4, 5, 6, 7, 8], 6, 7, 6, 6)
 ])
 def test_partition(seq: list, l_i: int, r_i: int, p_i: int, p_i_expected: int) -> None:
+    """Verify partition step works."""
     pivot = seq[p_i]
 
     seq_actual, p_i_actual = quicksort.partition(seq, l_i, r_i, p_i)
@@ -36,10 +38,11 @@ def test_partition(seq: list, l_i: int, r_i: int, p_i: int, p_i_expected: int) -
 @parameterized([
     ([x for x in random.sample(range(10), 10)],),
     ([x for x in random.sample(range(100), 100)],),
-    ([x for x in random.sample(range(1000), 1000)],),
-    ([x for x in random.sample(range(10000), 10000)],),
+    ([x for x in random.sample(range(1_000), 1_000)],),
+    ([x for x in random.sample(range(10_000), 10_000)],),
 ])
 def test_quicksort(seq: list) -> None:
+    """Verify QuickSort works."""
     expected = sorted(seq)
 
     actual = quicksort.quicksort(seq)
@@ -48,51 +51,47 @@ def test_quicksort(seq: list) -> None:
 
 
 def test_assignment_1() -> None:
-    seq = [
-        int(x)
-        for x in open('./input.txt', mode='r', encoding='utf-8')
-    ]
-    # Verify the contents of `input.txt` are as expected.
-    sorted_seq = sorted(seq)
-    assert sorted_seq == list(range(1, 10001))
+    """See <./README.md>."""
+    seq, sorted_seq = get_assignment_input()
 
     actual_seq, actual_n_comparisons = quicksort.quicksort_assignment_1(seq)
 
     assert actual_seq == sorted_seq
     print(f'{actual_n_comparisons = }')
-    assert actual_n_comparisons == 162085
+    assert actual_n_comparisons == 162_085
 
 
 def test_assignment_2() -> None:
-    seq = [
-        int(x)
-        for x in open('./input.txt', mode='r', encoding='utf-8')
-    ]
-    # Verify the contents of `input.txt` are as expected.
-    sorted_seq = sorted(seq)
-    assert sorted_seq == list(range(1, 10001))
+    """See <./README.md>."""
+    seq, sorted_seq = get_assignment_input()
 
     actual_seq, actual_n_comparisons = quicksort.quicksort_assignment_2(seq)
 
     assert actual_seq == sorted_seq
     print(f'{actual_n_comparisons = }')
-    assert actual_n_comparisons == 164123
+    assert actual_n_comparisons == 164_123
 
 
 def test_assignment_3() -> None:
+    """See <./README.md>."""
+    seq, sorted_seq = get_assignment_input()
+
+    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment_3(seq)
+
+    assert actual_seq == sorted_seq
+    print(f'{actual_n_comparisons = }')
+    assert actual_n_comparisons == 138_382
+
+
+def get_assignment_input() -> Tuple[List[int], List[int]]:
     seq = [
         int(x)
         for x in open('./input.txt', mode='r', encoding='utf-8')
     ]
     # Verify the contents of `input.txt` are as expected.
     sorted_seq = sorted(seq)
-    assert sorted_seq == list(range(1, 10001))
-
-    actual_seq, actual_n_comparisons = quicksort.quicksort_assignment_3(seq)
-
-    assert actual_seq == sorted_seq
-    print(f'{actual_n_comparisons = }')
-    assert actual_n_comparisons == 138382
+    assert sorted_seq == list(range(1, 10_001))
+    return seq, sorted_seq
 
 
 if __name__ == '__main__':
