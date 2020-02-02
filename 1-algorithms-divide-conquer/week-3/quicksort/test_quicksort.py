@@ -50,6 +50,53 @@ def test_quicksort(seq: list) -> None:
     assert actual == expected
 
 
+def test_random_pivot_picker() -> None:
+    l_i = 0
+    r_i = 999
+
+    for _ in range(100):
+        actual_i = quicksort.pick_random([], l_i, r_i)
+
+        assert l_i <= actual_i < r_i
+
+
+@parameterized([
+    (0, 4, 0),
+    (3, 14, 3),
+    (234, 3453, 234)
+])
+def test_leftmost_pivot_picker(l_i: int, r_i: int, expected_i: int) -> None:
+    actual_i = quicksort.pick_leftmost([], l_i, r_i)
+
+    assert actual_i == expected_i
+
+
+@parameterized([
+    (0, 4, 3),
+    (3, 14, 13),
+    (234, 3453, 3452)
+])
+def test_rightmost_pivot_picker(l_i: int, r_i: int, expected_i: int) -> None:
+    actual_i = quicksort.pick_rightmost([], l_i, r_i)
+
+    assert actual_i == expected_i
+
+
+@parameterized([
+    ([3, 8, 2, 5, 1, 4, 7, 6], 3),
+    ([5, 8, 2, 3, 1, 4, 7, 6], 0),
+    ([3, 8, 2, 8, 1, 4, 7, 5], 7)
+])
+def test_three_point_median_picker(seq: list, expected_i: int) -> None:
+    l_i = 0
+    r_i = len(seq)
+
+    actual_i = quicksort.pick_median_from_left_mid_right_points(seq, l_i, r_i)
+
+    print(f'{actual_i = }')
+    assert actual_i == expected_i
+
+
 def test_assignment_1() -> None:
     """See <./README.md>."""
     seq, sorted_seq = get_assignment_input()
