@@ -180,7 +180,6 @@ class TestAssignment:
         edges = mincut.convert_to_edges(vertices, directed=False)
         return list(edges)
 
-    @pytest.mark.slow
     @pytest.mark.xfail(reason='The algorithm is random and approximate.')
     def test_assignment_answer(self, graph: List[mincut.Edge]) -> None:
         min_cuts = mincut.estimate_min_cut(graph)
