@@ -8,7 +8,7 @@ Edge = Tuple[int, int]
 
 def main() -> None:
     vertices = read_file('vertices.txt')
-    edges = convert_to_edges(vertices)
+    edges = convert_to_edges(vertices, directed=False)
     graph = list(edges)
     min_cuts = estimate_min_cut(graph)
     print(min_cuts)
@@ -24,9 +24,32 @@ def read_file(filepath: str) -> Generator[RawVertex, None, None]:
         yield vertices[0], vertices[1:]
 
 
-def convert_to_edges(vertices: Generator[RawVertex, None, None]) -> Generator[Edge, None, None]:
+def convert_to_edges(
+    vertices: Generator[RawVertex, None, None],
+    directed: bool
+) -> Generator[Edge, None, None]:
+    if directed:
+        yield from _convert_to_edges_directed(vertices)
+    else:
+        yield from _convert_to_edges_non_directed(vertices)
+
+
+def _convert_to_edges_directed(
+    vertices: Generator[RawVertex, None, None]
+) -> Generator[Edge, None, None]:
     for vertex in vertices:
         yield from vertex_to_edge(vertex)
+
+
+def _convert_to_edges_non_directed(
+    vertices: Generator[RawVertex, None, None]
+) -> Generator[Edge, None, None]:
+    seen_edges: List[Edge] = []
+    for i, vertex in enumerate(vertices):
+        for u, v in vertex_to_edge(vertex):
+            if (u, v) not in seen_edges and (v, u) not in (seen_edges):
+                seen_edges.append((u, v))
+                yield u, v
 
 
 def vertex_to_edge(vertex: RawVertex) -> Generator[Edge, None, None]:
