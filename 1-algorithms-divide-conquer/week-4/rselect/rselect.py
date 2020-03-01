@@ -6,7 +6,6 @@ T = TypeVar('T', int, float)
 
 
 def r_select(seq: List[T], order: int) -> T:
-    print(f'{seq = }; {order = };')
     ith = order - 1
     l_i = 0
     r_i = len(seq) - 1
@@ -15,13 +14,10 @@ def r_select(seq: List[T], order: int) -> T:
 
 
 def _r_select(seq: List[T], ith: int, l_i: int, r_i: int) -> T:
-    print(f'{seq = }; {ith = }; {l_i = }; {r_i = };')
     if len(seq[l_i:r_i + 1]) <= 1:
         return seq[l_i]
     p_i = pick_pivot(seq, l_i, r_i)
-    print(f'{p_i = };')
     seq, p_i = partition(seq, l_i, r_i, p_i)
-    print(f'{p_i = };')
     if p_i == ith:
         return seq[p_i]
     if p_i > ith:
