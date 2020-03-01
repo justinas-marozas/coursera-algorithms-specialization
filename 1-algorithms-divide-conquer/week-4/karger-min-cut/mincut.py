@@ -10,12 +10,8 @@ def main() -> None:
     vertices = read_file('vertices.txt')
     edges = convert_to_edges(vertices)
     graph = list(edges)
-    cuts = [
-        random_contraction(graph)
-        for _ in range(count_vertices(graph))
-    ]
-    lengths = [len(cut) for cut in cuts]
-    print(min(lengths))
+    min_cuts = estimate_min_cut(graph)
+    print(min_cuts)
 
 
 def read_file(filepath: str) -> Generator[RawVertex, None, None]:
@@ -80,6 +76,15 @@ def remove_self_loops(graph: List[Edge]) -> List[Edge]:
         for u, v in graph
         if u != v
     ]
+
+
+def estimate_min_cut(graph: List[Edge]) -> int:
+    cuts = [
+        random_contraction(graph)
+        for _ in range(count_vertices(graph))
+    ]
+    lengths = [len(cut) for cut in cuts]
+    return min(lengths)
 
 
 if __name__ == '__main__':

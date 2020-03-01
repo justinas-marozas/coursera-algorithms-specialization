@@ -5,6 +5,34 @@ import pytest
 import mincut
 
 
+@pytest.fixture
+def graph() -> List[mincut.Edge]:
+    return [
+        (1, 2), (1, 3), (1, 4),
+        (2, 1), (2, 5), (2, 7),
+        (3, 1), (3, 4),
+        (4, 1), (4, 3), (4, 5), (4, 6), (4, 7),
+        (5, 2), (5, 4), (5, 7),
+        (6, 4), (6, 7), (6, 8),
+        (7, 2), (7, 4), (7, 5), (7, 6), (7, 8),
+        (8, 6), (8, 7),
+    ]
+
+
+@pytest.fixture
+def vertices() -> List[mincut.RawVertex]:
+    return [
+        (1, [2, 3, 4]),
+        (2, [1, 5, 7]),
+        (3, [1, 4]),
+        (4, [1, 3, 5, 6, 7]),
+        (5, [2, 4, 7]),
+        (6, [4, 7, 8]),
+        (7, [2, 4, 5, 6, 8]),
+        (8, [6, 7]),
+    ]
+
+
 class TestReadFile:
 
     @pytest.fixture
@@ -37,27 +65,8 @@ class TestReadFile:
 
 class TestConvertToEdges:
 
-    def test_vertices_converted_to_correct_edges(self) -> None:
-        vertices = [
-            (1, [2, 3, 4]),
-            (2, [1, 5, 7]),
-            (3, [1, 4]),
-            (4, [1, 3, 5, 6, 7]),
-            (5, [2, 4, 7]),
-            (6, [4, 7, 8]),
-            (7, [2, 4, 5, 6, 8]),
-            (8, [6, 7]),
-        ]
-        expected = [
-            (1, 2), (1, 3), (1, 4),
-            (2, 1), (2, 5), (2, 7),
-            (3, 1), (3, 4),
-            (4, 1), (4, 3), (4, 5), (4, 6), (4, 7),
-            (5, 2), (5, 4), (5, 7),
-            (6, 4), (6, 7), (6, 8),
-            (7, 2), (7, 4), (7, 5), (7, 6), (7, 8),
-            (8, 6), (8, 7),
-        ]
+    def test_vertices_converted_to_correct_edges(self, vertices, graph) -> None:
+        expected = graph
         actual = mincut.convert_to_edges(vertices)
         actual = list(actual)
         assert set(actual) == set(expected)
@@ -65,17 +74,7 @@ class TestConvertToEdges:
 
 class TestCountVertices:
 
-    def test_vertices_are_counted_correctly(self) -> None:
-        graph = [
-            (1, 2), (1, 3), (1, 4),
-            (2, 1), (2, 5), (2, 7),
-            (3, 1), (3, 4),
-            (4, 1), (4, 3), (4, 5), (4, 6), (4, 7),
-            (5, 2), (5, 4), (5, 7),
-            (6, 4), (6, 7), (6, 8),
-            (7, 2), (7, 4), (7, 5), (7, 6), (7, 8),
-            (8, 6), (8, 7),
-        ]
+    def test_vertices_are_counted_correctly(self, graph) -> None:
         actual = mincut.count_vertices(graph)
         assert actual == 8
 
@@ -99,17 +98,7 @@ class TestRemoveSelfLoops:
 
 class TestContractVertices:
 
-    def test_pivot_edges_get_merged(self) -> None:
-        graph = [
-            (1, 2), (1, 3), (1, 4),
-            (2, 1), (2, 5), (2, 7),
-            (3, 1), (3, 4),
-            (4, 1), (4, 3), (4, 5), (4, 6), (4, 7),
-            (5, 2), (5, 4), (5, 7),
-            (6, 4), (6, 7), (6, 8),
-            (7, 2), (7, 4), (7, 5), (7, 6), (7, 8),
-            (8, 6), (8, 7),
-        ]
+    def test_pivot_edges_get_merged(self, graph) -> None:
         pivot = (3, 1)
         expected = [
             (1, 2), (1, 1), (1, 4),
@@ -129,19 +118,20 @@ class TestContractVertices:
 
 class TestRandomContraction:
 
-    def test_it(self) -> None:
-        graph = [
-            (1, 2), (1, 3), (1, 4),
-            (2, 1), (2, 5), (2, 7),
-            (3, 1), (3, 4),
-            (4, 1), (4, 3), (4, 5), (4, 6), (4, 7),
-            (5, 2), (5, 4), (5, 7),
-            (6, 4), (6, 7), (6, 8),
-            (7, 2), (7, 4), (7, 5), (7, 6), (7, 8),
-            (8, 6), (8, 7),
-        ]
+    @pytest.fixture
+    def actual(self, graph) -> List[mincut.Edge]:
+        return mincut.random_contraction(graph)
 
-        actual = mincut.random_contraction(graph)
-
+    def test_two_vertices_remain(self, actual) -> None:
         assert mincut.count_vertices(actual) == 2
+
+    def test_no_self_references_remain(self, actual) -> None:
         assert all(u != v for u, v in actual)
+
+
+class TestEstimateMinCuts:
+
+    @pytest.mark.xfail(reason='The algorithm is random and approximate.')
+    def test_it(self, graph) -> None:
+        actual = mincut.estimate_min_cut(graph)
+        assert actual == 4
